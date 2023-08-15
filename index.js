@@ -14,7 +14,7 @@ app.use(cors());
 app.use("/admin",adminRouter) 
 app.use("/users", userRouter);
 
-app.use(authenticate);
+// app.use(authenticate);
 app.use("/product", productRouter);
 
 app.listen(process.env.PORT, async () => {
