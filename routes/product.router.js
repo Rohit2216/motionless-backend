@@ -22,30 +22,39 @@ productRouter.post("/create", async (req, res) => {
 
 
 productRouter.patch("/update/:productId", async (req, res) => {
-    const payload=req.body
-    const productId=req.params.Id
-    try{
-        await ProductModel.findByIdAndUpdate({_id:productId},payload)
-        res.status(200).send({msg:" updated succesfuly"})
+    const payload = req.body;
+    const productId = req.params.productId; // Corrected to "productId" instead of "Id"
 
-    }catch(error){
-        res.status(400).send({"msg":error.message})
+    console.log(payload,productId)
 
+    try {
+        const updatedProduct = await ProductModel.findByIdAndUpdate(
+            { _id: productId },
+            payload
+            // This option returns the updated document
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).send({ msg: "Product not found" });
+        }
+
+        res.status(200).send({ msg: "Updated successfully", product: updatedProduct });
+    } catch (error) {
+        res.status(400).send({ msg: error.message });
     }
-})
+});
+
 
 productRouter.delete("/delete/:productId", async (req, res) => {
-    // const payload=req.body
-    const productId=req.params.Id
-    try{
-        await ProductModel.findByIdAndDelete({_id:productId})
-        res.status(200).send({"msg":" deleted succesfuly"})
-
-    }catch(error){
-        res.status(400).send({"msg":error.message})
-
+    const productId = req.params.productId; // Use req.params.productId
+    try {
+        await ProductModel.findByIdAndDelete({ _id: productId });
+        res.status(200).send({ "msg": "Deleted successfully" });
+    } catch (error) {
+        res.status(400).send({ "msg": error.message });
     }
-})
+});
+
 
 
 module.exports = {
